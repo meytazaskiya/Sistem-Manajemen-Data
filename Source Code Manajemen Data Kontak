@@ -40,3 +40,23 @@ class ManajerKontak:
         hasil_pencarian = []
         for kontak in self.kontak_list:
 
+                hasil_pencarian.append(kontak)
+        return hasil_pencarian
+
+    def impor_dari_csv(self, filename):
+        try:
+            with open(filename, mode='r') as file:
+                csv_reader = csv.DictReader(file)
+                for row in csv_reader:
+                    self.tambah_kontak(Kontak(row['nama'], row['telepon'], row['email']))
+            return True
+        except FileNotFoundError:
+            return False
+
+class KontakApp:
+    def __init__(self, root):
+        self.manager = ManajerKontak()
+        self.root = root
+        self.root.title("Sistem Manajemen Kontak")
+
+        self.create_widgets()
