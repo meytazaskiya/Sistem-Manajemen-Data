@@ -1,0 +1,20 @@
+//Meyta Zaskiya
+    import tkinter as tk
+from tkinter import messagebox, filedialog
+import csv
+
+class Kontak:
+    def __init__(self, nama, telepon, email):
+        self.nama = nama
+        self.telepon = telepon
+        self.email = email
+
+class ManajerKontak:
+    def __init__(self):
+        self.kontak_list = []
+
+    def tambah_kontak(self, kontak):
+        self.kontak_list.append(kontak)
+
+    def lihat_kontak(self):
+        return self.kontak_list
