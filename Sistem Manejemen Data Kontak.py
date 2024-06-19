@@ -194,6 +194,17 @@ class KontakApp:
                 self.lihat_kontak()
             else:
                 messagebox.showerror("Error", f"File {filename} tidak ditemukan.")
+                
+    def clear_entries(self):
+        self.nama_entry.delete(0, tk.END)
+        self.telepon_entry.delete(0, tk.END)
+        self.email_entry.delete(0, tk.END)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = KontakApp(root)
+    root.mainloop()
+
         
 
 
