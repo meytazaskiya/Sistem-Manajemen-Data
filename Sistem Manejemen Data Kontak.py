@@ -1,4 +1,3 @@
-#Meyta Zaskiya
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from tkinter import ttk
@@ -61,38 +60,73 @@ class KontakApp:
     def __init__(self, root):
         self.manager = ManajerKontak()
         self.root = root
-        self.root.title("Sistem Manajemen Kontak")
-
+        self.root.title("SELAMAT DATANG DI SISTEM MANAJEMEN KONTAK")
+       
+        # Apply a style
         self.style = ttk.Style()
-        self.style.configure('TFrame', background='#e1d8b9')
-        self.style.configure('TButton', background='#e1d8b9')
-        self.style.configure('TLabel', background='#e1d8b9', font=('Arial', 10))
+        self.style.configure('TFrame', background='#ADD8E6')
+        self.style.configure('TButton', background='#ADD8E6')
+        self.style.configure('TLabel', background='#ADD8E6', font=('Poppins', 10))
+        self.style.configure('TEntry', font=('Poppins', 10))
+        self.style.configure('TText', font=('Poppins', 10))
 
-#Citra Fardiani
-        self.style.configure('TEntry', font=('Arial', 10))
-        self.style.configure('TText', font=('Arial', 10))
+        # Add menu bar
+        self.create_menu()      
 
+        # Add widgets
         self.create_widgets()
+
+    def create_menu(self):
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
+
+      
+        search_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Search", menu=search_menu)
+        search_menu.add_command(label="Cari Kontak", command=self.show_search_dialog)
+
+    def show_search_dialog(self):
+        search_dialog = tk.Toplevel(self.root)
+        search_dialog.title("Cari Kontak")
+
+        ttk.Label(search_dialog, text="Masukkan Nama:").grid(row=0, column=0, padx=10, pady=10)
+        self.search_entry = ttk.Entry(search_dialog, width=30)
+        self.search_entry.grid(row=0, column=1, padx=10, pady=10)
+
+        search_button = ttk.Button(search_dialog, text="Cari", command=self.perform_search)
+        search_button.grid(row=1, column=0, columnspan=2, pady=10)
+
+    def perform_search(self):
+        nama_partial = self.search_entry.get()
+        hasil_pencarian = self.manager.cari_kontak(nama_partial)
+        self.kontak_text.delete(1.0, tk.END)
+        if hasil_pencarian:
+            for kontak in hasil_pencarian:
+                self.kontak_text.insert(tk.END, f"Nama\t: {kontak.nama}\nTelepon\t: {kontak.telepon}\nEmail\t: {kontak.email}\n\n")
+        else:
+            messagebox.showinfo("Error", "Kontak tidak ditemukan.")
 
     def create_widgets(self):
         frame = ttk.Frame(self.root, padding="10 10 10 10")
         frame.pack(padx=10, pady=10, fill='x', expand=True)
 
-        self.nama_label = ttk.Label(frame, text="Nama:")
+       
+        self.nama_label = ttk.Label(frame, text="Nama\t:")
         self.nama_label.grid(row=0, column=0, sticky="e")
         self.nama_entry = ttk.Entry(frame, width=30)
         self.nama_entry.grid(row=0, column=1, pady=5)
 
-        self.telepon_label = ttk.Label(frame, text="Telepon:")
+        self.telepon_label = ttk.Label(frame, text="Telepon\t:")
         self.telepon_label.grid(row=1, column=0, sticky="e")
         self.telepon_entry = ttk.Entry(frame, width=30)
         self.telepon_entry.grid(row=1, column=1, pady=5)
 
-        self.email_label = ttk.Label(frame, text="Email:")
+        self.email_label = ttk.Label(frame, text="Email\t:")
         self.email_label.grid(row=2, column=0, sticky="e")
         self.email_entry = ttk.Entry(frame, width=30)
         self.email_entry.grid(row=2, column=1, pady=5)
 
+       
         button_frame = ttk.Frame(frame)
         button_frame.grid(row=3, column=0, columnspan=2, pady=10)
 
@@ -108,6 +142,7 @@ class KontakApp:
         self.hapus_button = ttk.Button(button_frame, text="Hapus Kontak", command=self.hapus_kontak)
         self.hapus_button.grid(row=1, column=0, padx=5, pady=5)
 
+       
         self.kriteria_urutkan_label = ttk.Label(button_frame, text="Urutkan Berdasarkan:")
         self.kriteria_urutkan_label.grid(row=1, column=1, padx=5, pady=5)
         self.kriteria_urutkan = tk.StringVar(value="Nama")
@@ -117,16 +152,14 @@ class KontakApp:
         self.urutkan_button = ttk.Button(button_frame, text="Urutkan Kontak", command=self.urutkan_kontak)
         self.urutkan_button.grid(row=1, column=3, padx=5, pady=5)
 
-        self.cari_button = ttk.Button(button_frame, text="Cari Kontak", command=self.cari_kontak)
-        self.cari_button.grid(row=1, column=4, padx=5, pady=5)
-
         self.impor_button = ttk.Button(button_frame, text="Impor dari CSV", command=self.impor_dari_csv)
         self.impor_button.grid(row=2, column=0, columnspan=3, padx=5, pady=5)
 
         self.keluar_button = ttk.Button(button_frame, text="Keluar", command=self.root.quit)
         self.keluar_button.grid(row=3, column=0, columnspan=3, padx=5, pady=5)
 
-        self.kontak_text = tk.Text(self.root, height=15, width=50, font=('Arial', 10))
+       
+        self.kontak_text = tk.Text(self.root, height=15, width=50, font=('Poppins', 10))
         self.kontak_text.pack(pady=10, padx=10)
 
     def tambah_kontak(self):
@@ -138,7 +171,7 @@ class KontakApp:
             self.manager.tambah_kontak(Kontak(nama, telepon, email))
             messagebox.showinfo("Sukses", "Kontak berhasil ditambahkan!")
         else:
-            messagebox.showerror("Error", "Semua item harus diisi.")
+            messagebox.showerror("Error", "Semua field harus diisi.")
 
         self.clear_entries()
 
@@ -174,17 +207,7 @@ class KontakApp:
         kriteria = self.kriteria_urutkan.get()
         self.manager.urutkan_kontak(kriteria)
         self.lihat_kontak()
-        messagebox.showinfo("Info", f"Kontak berhasil diurutkan berdasarkan {kriteria}.")
-        
-    def cari_kontak(self):
-        nama_partial = self.nama_entry.get()
-        hasil_pencarian = self.manager.cari_kontak(nama_partial)
-        self.kontak_text.delete(1.0, tk.END)
-        if hasil_pencarian:
-            for kontak in hasil_pencarian:
-                self.kontak_text.insert(tk.END, f"Nama\t: {kontak.nama}\nTelepon\t: {kontak.telepon}\nEmail\t: {kontak.email}\n\n")
-        else:
-            messagebox.showinfo("Info", "Kontak tidak ditemukan.")
+        messagebox.showinfo("Sukses", f"Kontak berhasil diurutkan berdasarkan {kriteria}.")
 
     def impor_dari_csv(self):
         filename = filedialog.askopenfilename(filetypes=(("CSV Files", "*.csv"),))
@@ -194,7 +217,7 @@ class KontakApp:
                 self.lihat_kontak()
             else:
                 messagebox.showerror("Error", f"File {filename} tidak ditemukan.")
-                
+        
     def clear_entries(self):
         self.nama_entry.delete(0, tk.END)
         self.telepon_entry.delete(0, tk.END)
@@ -204,7 +227,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = KontakApp(root)
     root.mainloop()
-
-        
-
-
