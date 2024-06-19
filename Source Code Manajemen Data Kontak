@@ -18,3 +18,25 @@ class ManajerKontak:
 
     def lihat_kontak(self):
         return self.kontak_list
+
+   def perbarui_kontak(self, nama_lama, kontak_baru):
+        for idx, kontak in enumerate(self.kontak_list):
+            if kontak.nama == nama_lama:
+                self.kontak_list[idx] = kontak_baru
+                return True
+        return False
+
+    def hapus_kontak(self, nama):
+        for idx, kontak in enumerate(self.kontak_list):
+            if kontak.nama == nama:
+                del self.kontak_list[idx]
+                return True
+        return False
+
+    def urutkan_kontak(self):
+        self.kontak_list.sort(key=lambda kontak: kontak.nama)
+
+    def cari_kontak(self, nama_partial):
+        hasil_pencarian = []
+        for kontak in self.kontak_list:
+
