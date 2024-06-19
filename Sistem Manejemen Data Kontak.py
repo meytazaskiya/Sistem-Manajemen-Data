@@ -136,9 +136,9 @@ class KontakApp:
 
         if nama and telepon and email:
             self.manager.tambah_kontak(Kontak(nama, telepon, email))
-            messagebox.showinfo("Info", "Kontak berhasil ditambahkan!")
+            messagebox.showinfo("Sukses", "Kontak berhasil ditambahkan!")
         else:
-            messagebox.showerror("Error", "Semua field harus diisi.")
+            messagebox.showerror("Error", "Semua item harus diisi.")
 
         self.clear_entries()
 
@@ -146,7 +146,7 @@ class KontakApp:
         kontak_list = self.manager.lihat_kontak()
         self.kontak_text.delete(1.0, tk.END)
         for kontak in kontak_list:
-            self.kontak_text.insert(tk.END, f"Nama: {kontak.nama}\nTelepon: {kontak.telepon}\nEmail: {kontak.email}\n\n")
+            self.kontak_text.insert(tk.END, f"Nama\t: {kontak.nama}\nTelepon\t: {kontak.telepon}\nEmail\t: {kontak.email}\n\n")
 
     def perbarui_kontak(self):
         nama_lama = self.nama_entry.get()
@@ -155,16 +155,16 @@ class KontakApp:
         email_baru = self.email_entry.get()
 
         if self.manager.perbarui_kontak(nama_lama, Kontak(nama_baru, telepon_baru, email_baru)):
-            messagebox.showinfo("Info", "Kontak berhasil diperbarui.")
+            messagebox.showinfo("Sukses", "Kontak berhasil diperbarui.")
         else:
             messagebox.showerror("Error", "Kontak tidak ditemukan.")
         
         self.clear_entries()
 
-def hapus_kontak(self):
+    def hapus_kontak(self):
         nama = self.nama_entry.get()
         if self.manager.hapus_kontak(nama):
-            messagebox.showinfo("Info", "Kontak berhasil dihapus.")
+            messagebox.showinfo("Sukses", "Kontak berhasil dihapus.")
         else:
             messagebox.showerror("Error", "Kontak tidak ditemukan.")
         
@@ -175,3 +175,25 @@ def hapus_kontak(self):
         self.manager.urutkan_kontak(kriteria)
         self.lihat_kontak()
         messagebox.showinfo("Info", f"Kontak berhasil diurutkan berdasarkan {kriteria}.")
+        
+    def cari_kontak(self):
+        nama_partial = self.nama_entry.get()
+        hasil_pencarian = self.manager.cari_kontak(nama_partial)
+        self.kontak_text.delete(1.0, tk.END)
+        if hasil_pencarian:
+            for kontak in hasil_pencarian:
+                self.kontak_text.insert(tk.END, f"Nama\t: {kontak.nama}\nTelepon\t: {kontak.telepon}\nEmail\t: {kontak.email}\n\n")
+        else:
+            messagebox.showinfo("Info", "Kontak tidak ditemukan.")
+
+    def impor_dari_csv(self):
+        filename = filedialog.askopenfilename(filetypes=(("CSV Files", "*.csv"),))
+        if filename:
+            if self.manager.impor_dari_csv(filename):
+                messagebox.showinfo("Sukses", "Kontak berhasil diimpor.")
+                self.lihat_kontak()
+            else:
+                messagebox.showerror("Error", f"File {filename} tidak ditemukan.")
+        
+
+
