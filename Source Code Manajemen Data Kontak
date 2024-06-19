@@ -1,6 +1,7 @@
 //Meyta Zaskiya
-    import tkinter as tk
+import tkinter as tk
 from tkinter import messagebox, filedialog
+from tkinter import ttk
 import csv
 
 class Kontak:
@@ -19,44 +20,5 @@ class ManajerKontak:
     def lihat_kontak(self):
         return self.kontak_list
 
-   def perbarui_kontak(self, nama_lama, kontak_baru):
+    def perbarui_kontak(self, nama_lama, kontak_baru):
         for idx, kontak in enumerate(self.kontak_list):
-            if kontak.nama == nama_lama:
-                self.kontak_list[idx] = kontak_baru
-                return True
-        return False
-
-    def hapus_kontak(self, nama):
-        for idx, kontak in enumerate(self.kontak_list):
-            if kontak.nama == nama:
-                del self.kontak_list[idx]
-                return True
-        return False
-
-    def urutkan_kontak(self):
-        self.kontak_list.sort(key=lambda kontak: kontak.nama)
-
-    def cari_kontak(self, nama_partial):
-        hasil_pencarian = []
-        for kontak in self.kontak_list:
-
-                hasil_pencarian.append(kontak)
-        return hasil_pencarian
-
-    def impor_dari_csv(self, filename):
-        try:
-            with open(filename, mode='r') as file:
-                csv_reader = csv.DictReader(file)
-                for row in csv_reader:
-                    self.tambah_kontak(Kontak(row['nama'], row['telepon'], row['email']))
-            return True
-        except FileNotFoundError:
-            return False
-
-class KontakApp:
-    def __init__(self, root):
-        self.manager = ManajerKontak()
-        self.root = root
-        self.root.title("Sistem Manajemen Kontak")
-
-        self.create_widgets()
