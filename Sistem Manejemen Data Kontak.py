@@ -135,3 +135,29 @@ class KontakApp:
         email = self.email_entry.get()
 
         if nama and telepon and email:
+            self.manager.tambah_kontak(Kontak(nama, telepon, email))
+            messagebox.showinfo("Info", "Kontak berhasil ditambahkan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi.")
+
+        self.clear_entries()
+
+    def lihat_kontak(self):
+        kontak_list = self.manager.lihat_kontak()
+        self.kontak_text.delete(1.0, tk.END)
+        for kontak in kontak_list:
+            self.kontak_text.insert(tk.END, f"Nama: {kontak.nama}\nTelepon: {kontak.telepon}\nEmail: {kontak.email}\n\n")
+
+    def perbarui_kontak(self):
+        nama_lama = self.nama_entry.get()
+        nama_baru = self.nama_entry.get()
+        telepon_baru = self.telepon_entry.get()
+        email_baru = self.email_entry.get()
+
+        if self.manager.perbarui_kontak(nama_lama, Kontak(nama_baru, telepon_baru, email_baru)):
+            messagebox.showinfo("Info", "Kontak berhasil diperbarui.")
+        else:
+            messagebox.showerror("Error", "Kontak tidak ditemukan.")
+        
+        self.clear_entries()
+
