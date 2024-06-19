@@ -161,3 +161,17 @@ class KontakApp:
         
         self.clear_entries()
 
+def hapus_kontak(self):
+        nama = self.nama_entry.get()
+        if self.manager.hapus_kontak(nama):
+            messagebox.showinfo("Info", "Kontak berhasil dihapus.")
+        else:
+            messagebox.showerror("Error", "Kontak tidak ditemukan.")
+        
+        self.clear_entries()
+
+    def urutkan_kontak(self):
+        kriteria = self.kriteria_urutkan.get()
+        self.manager.urutkan_kontak(kriteria)
+        self.lihat_kontak()
+        messagebox.showinfo("Info", f"Kontak berhasil diurutkan berdasarkan {kriteria}.")
